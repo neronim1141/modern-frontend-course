@@ -13,7 +13,6 @@ export type InferGetStaticPaths<T> = T extends () => Promise<{
 
 const ProductsPage = ({
   data,
-  page,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   if (!data) {
     return <>cos nie tak</>;
@@ -34,47 +33,23 @@ const ProductsPage = ({
           </li>
         ))}
       </ul>
-      <Pagination current={page} />
+      <Pagination current={"1"} />
     </Main>
   );
 };
 
 export default ProductsPage;
 
-export const getStaticPaths = async () => {
-  return {
-    paths: new Array(10).fill(0).map((_, i) => {
-      return {
-        params: {
-          page: (i + 1).toString(),
-        },
-      };
-    }),
-    fallback: false,
-  };
-};
-
-export const getStaticProps = async ({
-  params,
-}: InferGetStaticPaths<typeof getStaticPaths>) => {
-  if (!params?.page)
-    return {
-      props: {},
-      notFound: true,
-    };
-
+export const getStaticProps = async () => {
   const data: Product[] = await (
     await fetch(
-      `https://naszsklep-api.vercel.app/api/products?take=25&offset=${
-        (Number(params.page) - 1) * 25
-      }`
+      `https://naszsklep-api.vercel.app/api/products?take=25&offset=0`
     )
   ).json();
 
   return {
     props: {
       data,
-      page: params.page,
     },
   };
 };
