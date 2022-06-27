@@ -36,7 +36,7 @@ export const ProductListItem = ({ data }: ProductListItemProps) => {
   return (
     <>
       <img src={data.thumbnailUrl} alt={data.thumbnailAlt} />
-      <Link href={`products/${data.id}`}>
+      <Link href={`product/${data.id}`}>
         <a>
           <h2 className="font-bold text-2xl">{data.title}</h2>
         </a>
