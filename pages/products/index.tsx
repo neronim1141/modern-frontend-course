@@ -9,7 +9,10 @@ const ProductsPage = ({
     <Main>
       <ul className=" grid  sm:grid-cols-2 md:grid-cols-3 gap-2 w-full">
         {data.map((product) => (
-          <li key={product.id} className="shadow-xl ">
+          <li
+            key={product.id}
+            className="shadow-xl bg-white border border-gray-200 h-full p-4 rounded"
+          >
             <ProductListItem
               data={{
                 id: product.id,
@@ -29,7 +32,7 @@ export default ProductsPage;
 
 export const getStaticProps = async () => {
   const data: StoreApiResponse[] = await (
-    await fetch("https://fakestoreapi.com/products/")
+    await fetch("https://naszsklep-api.vercel.app/api/products")
   ).json();
 
   return {
@@ -46,6 +49,7 @@ export interface StoreApiResponse {
   title: string;
   price: number;
   description: string;
+  longDescription: string;
   category: string;
   image: string;
   rating: {

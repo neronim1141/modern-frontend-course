@@ -12,11 +12,7 @@ const DATA = {
 };
 
 const Home = () => {
-  return (
-    <Main>
-      <ProductDetails data={DATA} />
-    </Main>
-  );
+  return <Main>Hi</Main>;
 };
 
 export default Home;
