@@ -14,15 +14,8 @@ export const NextMarkdown = ({ children }: NextMarkdownProps) => {
       <MDXRemote
         {...children}
         components={{
-          a: ({ href, ...props }) => {
-            if (!href) {
-              return <a {...props} />;
-            }
-            return (
-              <Link href={href}>
-                <a {...props}></a>
-              </Link>
-            );
+          a: (props) => {
+            return <a {...props} rel="noopener noreferrer" />;
           },
         }}
       />
