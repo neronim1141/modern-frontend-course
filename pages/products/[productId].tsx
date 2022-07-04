@@ -1,9 +1,6 @@
-import {
-  GetStaticPathsResult,
-  GetStaticPropsContext,
-  InferGetStaticPropsType,
-} from "next";
+import { InferGetStaticPropsType } from "next";
 import { Main } from "../../components/Main";
+import { serialize } from "next-mdx-remote/serialize";
 import { ProductDetails } from "../../components/Product";
 
 export type InferGetStaticPaths<T> = T extends () => Promise<{
@@ -69,9 +66,18 @@ export const getStaticProps = async ({
     )
   ).json();
 
+  if (!data) {
+    return {
+      props: {},
+      notFound: true,
+    };
+  }
+
+  const compiledMarkdown = await serialize(data?.longDescription);
+
   return {
     props: {
-      data,
+      data: { ...data, longDescription: compiledMarkdown },
     },
   };
 };
