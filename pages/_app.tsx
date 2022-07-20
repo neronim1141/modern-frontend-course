@@ -4,16 +4,23 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import Layout from "../components/Layout";
 import { DefaultSeo } from "next-seo";
 import SEO from "../next-seo.config";
+import { CartProvider } from "../components/Cart/CartContext";
+import { ApolloProvider } from "@apollo/client";
+import { apolloClient } from "../graphql/apolloClient";
 
-const client = new QueryClient();
+const queryClient = new QueryClient();
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <QueryClientProvider client={client}>
-      <DefaultSeo {...SEO} />
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </QueryClientProvider>
+    <ApolloProvider client={apolloClient}>
+      <QueryClientProvider client={queryClient}>
+        <CartProvider>
+          <DefaultSeo {...SEO} />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </CartProvider>
+      </QueryClientProvider>
+    </ApolloProvider>
   );
 }
 

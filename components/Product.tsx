@@ -1,16 +1,17 @@
 import { NextSeo } from "next-seo";
 import Image from "next/image";
 import Link from "next/link";
+import { useCartState } from "./Cart/CartContext";
 import { MarkdownResult, NextMarkdown } from "./NextMarkdown";
 import { Rating } from "./Rating";
 
 interface ProductDetails {
-  id: number;
+  id: string;
   title: string;
   thumbnailUrl: string;
   thumbnailAlt: string;
   description: string;
-  longDescription: MarkdownResult;
+  longDescription?: MarkdownResult;
   rating: number;
 }
 
@@ -50,7 +51,9 @@ export const ProductDetails = ({ data }: ProductProps) => {
       <p className="p-4">{data.description}</p>
       <Rating rating={data.rating} />
 
-      <NextMarkdown>{data.longDescription}</NextMarkdown>
+      {data.longDescription && (
+        <NextMarkdown>{data.longDescription}</NextMarkdown>
+      )}
     </>
   );
 };
@@ -64,8 +67,9 @@ interface ProductListItemProps {
   data: ProductListItem;
 }
 export const ProductListItem = ({ data }: ProductListItemProps) => {
+  const { addItemToCart } = useCartState();
   return (
-    <>
+    <div className="flex flex-col h-full">
       <Image
         src={data.thumbnailUrl}
         alt={data.thumbnailAlt}
@@ -79,6 +83,15 @@ export const ProductListItem = ({ data }: ProductListItemProps) => {
           <h2 className="font-bold text-2xl">{data.title}</h2>
         </a>
       </Link>
-    </>
+      <div className="flex-grow" />
+      <button
+        onClick={() =>
+          addItemToCart({ id: data.id, title: data.title, price: 10, count: 1 })
+        }
+        className="self-center border border-black hover:bg-neutral-200 rounded px-2 py-1"
+      >
+        dodaj do koszyka
+      </button>
+    </div>
   );
 };

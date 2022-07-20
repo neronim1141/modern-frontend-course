@@ -1,7 +1,7 @@
+import { gql, useQuery } from "@apollo/client";
 import { Main } from "../components/Main";
 
 const Home = () => {
-  return <Main>Hi</Main>;
+  return <Main>test</Main>;
 };
-
 export default Home;
