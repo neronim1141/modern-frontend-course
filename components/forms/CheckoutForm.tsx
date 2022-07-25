@@ -1,28 +1,39 @@
 import React from "react";
+import { useForm } from "react-hook-form";
+import { Input } from "../Input";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
-interface ChekoutFormData {
-  emailAddress: string;
-  nameOnCard: string;
-  cardNumber: string;
-  exporationData: string;
-  cvc: string;
-  company: string;
-  address: string;
-  apartment: string;
-  city: string;
-  region: string;
-  postalCode: string;
-  sameAsShipping: string;
-}
+const schema = yup.object({
+  emailAddress: yup.string().email().required(),
+  nameOnCard: yup.string().required(),
+  cardNumber: yup.string().required(),
+  expirationDate: yup.string().required(),
+  cvc: yup.string().required(),
+  company: yup.string().required(),
+  address: yup.string().required(),
+  apartment: yup.string().required(),
+  city: yup.string().required(),
+  region: yup.string().required(),
+  postalCode: yup.string().required(),
+  sameAsShipping: yup.boolean().required(),
+});
+type CheckoutFormData = yup.InferType<typeof schema>;
+
 export const CheckoutForm = () => {
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
-    e.preventDefault();
-    console.log(e);
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CheckoutFormData>({
+    resolver: yupResolver(schema),
+  });
+  const onSubmit = handleSubmit((data) => console.log(data));
+
   return (
     <form
       className="pt-16 pb-36 px-4 sm:px-6 lg:pb-16 lg:px-0 lg:row-start-1 lg:col-start-1"
-      onSubmit={handleSubmit}
+      onSubmit={onSubmit}
     >
       <div className="max-w-lg mx-auto lg:max-w-none">
         <section aria-labelledby="contact-info-heading">
@@ -41,12 +52,12 @@ export const CheckoutForm = () => {
               Email address
             </label>
             <div className="mt-1">
-              <input
+              <Input
                 type="email"
                 id="email-address"
-                name="emailAddress"
+                {...register("emailAddress", { required: "wymagane" })}
                 autoComplete="email"
-                className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                error={errors.emailAddress}
               />
             </div>
           </div>
@@ -69,12 +80,11 @@ export const CheckoutForm = () => {
                 Name on card
               </label>
               <div className="mt-1">
-                <input
-                  type="text"
+                <Input
                   id="name-on-card"
-                  name="nameOnCard"
+                  {...register("nameOnCard")}
                   autoComplete="cc-name"
-                  className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  error={errors.nameOnCard}
                 />
               </div>
             </div>
@@ -87,12 +97,11 @@ export const CheckoutForm = () => {
                 Card number
               </label>
               <div className="mt-1">
-                <input
-                  type="text"
+                <Input
                   id="card-number"
-                  name="cardNumber"
+                  {...register("cardNumber")}
                   autoComplete="cc-number"
-                  className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  error={errors.cardNumber}
                 />
               </div>
             </div>
@@ -105,12 +114,11 @@ export const CheckoutForm = () => {
                 Expiration date (MM/YY)
               </label>
               <div className="mt-1">
-                <input
-                  type="text"
-                  name="expirationDate"
+                <Input
+                  {...register("expirationDate")}
                   id="expiration-date"
                   autoComplete="cc-exp"
-                  className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  error={errors.expirationDate}
                 />
               </div>
             </div>
@@ -123,12 +131,11 @@ export const CheckoutForm = () => {
                 CVC
               </label>
               <div className="mt-1">
-                <input
-                  type="text"
-                  name="cvc"
+                <Input
+                  {...register("cvc")}
                   id="cvc"
                   autoComplete="csc"
-                  className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  error={errors.cvc}
                 />
               </div>
             </div>
@@ -152,11 +159,10 @@ export const CheckoutForm = () => {
                 Company
               </label>
               <div className="mt-1">
-                <input
-                  type="text"
+                <Input
                   id="company"
-                  name="company"
-                  className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  {...register("company")}
+                  error={errors.company}
                 />
               </div>
             </div>
@@ -169,12 +175,11 @@ export const CheckoutForm = () => {
                 Address
               </label>
               <div className="mt-1">
-                <input
-                  type="text"
+                <Input
                   id="address"
-                  name="address"
+                  {...register("address")}
                   autoComplete="street-address"
-                  className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  error={errors.address}
                 />
               </div>
             </div>
@@ -187,11 +192,10 @@ export const CheckoutForm = () => {
                 Apartment, suite, etc.
               </label>
               <div className="mt-1">
-                <input
-                  type="text"
+                <Input
                   id="apartment"
-                  name="apartment"
-                  className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  {...register("apartment")}
+                  error={errors.apartment}
                 />
               </div>
             </div>
@@ -204,12 +208,7 @@ export const CheckoutForm = () => {
                 City
               </label>
               <div className="mt-1">
-                <input
-                  type="text"
-                  id="city"
-                  name="city"
-                  className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                />
+                <Input id="city" {...register("city")} error={errors.city} />
               </div>
             </div>
 
@@ -221,11 +220,10 @@ export const CheckoutForm = () => {
                 Province
               </label>
               <div className="mt-1">
-                <input
-                  type="text"
-                  id="province"
-                  name="province"
-                  className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                <Input
+                  id="region"
+                  {...register("region")}
+                  error={errors.region}
                 />
               </div>
             </div>
@@ -238,12 +236,11 @@ export const CheckoutForm = () => {
                 Postal code
               </label>
               <div className="mt-1">
-                <input
-                  type="text"
+                <Input
                   id="postal-code"
-                  name="postalCode"
+                  {...register("postalCode")}
                   autoComplete="postal-code"
-                  className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  error={errors.postalCode}
                 />
               </div>
             </div>
@@ -261,7 +258,7 @@ export const CheckoutForm = () => {
           <div className="mt-6 flex items-center">
             <input
               id="same-as-shipping"
-              name="sameAsShipping"
+              {...register("sameAsShipping")}
               type="checkbox"
               checked
               className="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500"
